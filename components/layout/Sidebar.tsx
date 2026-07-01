@@ -8,8 +8,7 @@ import type { PatientSummary } from "@/types/patient";
 const NAV_ITEMS: Array<{ label: string; href: string | null }> = [
   { label: "Patient Intake", href: "/" },
   { label: "FHIR Explorer", href: "/fhir-explorer" },
-  { label: "Encounter Timeline", href: null },
-  { label: "About", href: null },
+  { label: "About", href: "/about" },
 ];
 
 function NavItem({
