@@ -17,7 +17,14 @@ import {
 } from "./transforms";
 import type { IntakeData, PatientSummary } from "@/types/patient";
 import type { ExplorerData } from "@/types/explorer";
+import type { ExplainabilityData } from "@/types/explainability";
 import { scorePatient } from "@/lib/relevance";
+import { buildExplainabilityData } from "./explainability";
+
+export interface PatientDashboard {
+  intake: IntakeData;
+  explainability: ExplainabilityData;
+}
 
 // Both fetchIntakeData and fetchExplorerData must use this count so that
 // mostRecentRawEncounter operates on an identical candidate pool in each view.
@@ -143,6 +150,60 @@ export async function fetchExplorerData(patientId?: string): Promise<ExplorerDat
       recentEncounters: encounters,
       chartContext: buildChartContext(conditions, allergies, encounters),
     },
+  };
+}
+
+// Fetches all bundles once and produces both IntakeData and ExplainabilityData
+// in a single network pass — no duplicate requests.
+export async function fetchPatientDashboard(
+  patientId?: string,
+): Promise<PatientDashboard> {
+  const patientData = await resolvePatient(patientId);
+  const pid = patientData.id;
+
+  const [conditionsResult, allergiesResult, encountersResult] =
+    await Promise.allSettled([
+      fhirFetch<FHIRBundle<FHIRCondition>>(`/Condition?patient=${pid}`),
+      fhirFetch<FHIRBundle<FHIRAllergyIntolerance>>(
+        `/AllergyIntolerance?patient=${pid}`,
+      ),
+      fhirFetch<FHIRBundle<FHIREncounter>>(
+        `/Encounter?patient=${pid}&_count=${ENCOUNTER_FETCH_COUNT}`,
+      ),
+    ]);
+
+  const condBundle =
+    conditionsResult.status === "fulfilled"
+      ? conditionsResult.value
+      : { resourceType: "Bundle" as const, entry: [] };
+  const allergyBundle =
+    allergiesResult.status === "fulfilled"
+      ? allergiesResult.value
+      : { resourceType: "Bundle" as const, entry: [] };
+  const encounterBundle =
+    encountersResult.status === "fulfilled"
+      ? encountersResult.value
+      : { resourceType: "Bundle" as const, entry: [] };
+
+  const conditions = transformConditions(condBundle);
+  const allergies = transformAllergies(allergyBundle);
+  const encounters = transformEncounters(encounterBundle);
+  const latestEncounter = mostRecentRawEncounter(encounterBundle);
+
+  return {
+    intake: {
+      patient: transformPatient(patientData, latestEncounter),
+      conditions,
+      allergies,
+      recentEncounters: encounters,
+      chartContext: buildChartContext(conditions, allergies, encounters),
+    },
+    explainability: buildExplainabilityData(
+      patientData,
+      condBundle,
+      allergyBundle,
+      encounterBundle,
+    ),
   };
 }
 

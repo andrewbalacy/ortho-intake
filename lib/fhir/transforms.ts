@@ -113,7 +113,8 @@ export function transformPatientSummary(patient: FHIRPatient): PatientSummary {
 // ---------------------------------------------------------------------------
 
 // SNOMED display strings append semantic tags like "(disorder)" — strip them.
-function cleanDisplay(raw: string): string {
+// Exported for reuse in the explainability layer.
+export function cleanDisplay(raw: string): string {
   return raw
     .replace(/\s*\((disorder|finding|procedure|situation|regime\/therapy)\)$/i, "")
     .trim();
@@ -169,12 +170,14 @@ export function transformAllergies(
 // neither field is present, placing those encounters last when sorted desc.
 // Both sortByDate and mostRecentRawEncounter must use this helper so that
 // transformEncounters and the reason-for-visit selection always agree on rank.
-function getEncounterDate(encounter: FHIREncounter): number {
+// Exported for reuse in the explainability layer so encounter ordering
+// is guaranteed to use the same date-extraction logic as the transform layer.
+export function getEncounterDate(encounter: FHIREncounter): number {
   const dateStr = encounter.period?.start ?? encounter.period?.end;
   return dateStr ? new Date(dateStr).getTime() : 0;
 }
 
-function hasPeriod(encounter: FHIREncounter): boolean {
+export function hasPeriod(encounter: FHIREncounter): boolean {
   return !!(encounter.period?.start || encounter.period?.end);
 }
 
