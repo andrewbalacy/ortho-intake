@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OrthoIntake
 
-## Getting Started
+**A FHIR-powered clinical intake dashboard for orthopedic workflows.**
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+OrthoIntake aggregates standardized FHIR R4 resources into a streamlined clinical intake dashboard designed for orthopedic urgent care settings. Rather than requiring staff to navigate multiple chart sections before a patient is roomed, OrthoIntake surfaces relevant information — demographics, allergies, prior encounters, and chronic conditions — in a single, organized view.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The project is built as a Health IT workflow prototype and demonstrates practical applications of the FHIR standard in point-of-care settings.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Design principle:** Clinical software should reduce cognitive load, not replace clinical judgment.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technology
 
-## Learn More
+| Layer | Technology |
+|---|---|
+| Framework | Next.js (App Router) |
+| UI Library | React |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Clinical Standard | FHIR R4 |
+| Data Source | SMART Health IT Sandbox |
+| Deployment | Vercel |
 
-To learn more about Next.js, take a look at the following resources:
+## Status
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**In Development**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Roadmap
 
-## Deploy on Vercel
+| Version | Milestone |
+|---|---|
+| v0.1 | Static dashboard layout with placeholder clinical data |
+| v0.2 | Connect to public FHIR sandbox |
+| v0.3 | Add patient search and multiple synthetic patients |
+| v0.4 | Add SMART-on-FHIR authentication exploration |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See [docs/roadmap.md](docs/roadmap.md) for the full roadmap.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation
+
+- [Architecture](docs/architecture.md) — project structure and component responsibilities
+- [Workflow](docs/workflow.md) — the clinical problem this project addresses
+- [Roadmap](docs/roadmap.md) — version milestones and planned features
