@@ -41,16 +41,24 @@ const intakeData: IntakeData = {
 
 export default function Home() {
   return (
-    <AppShell header={<DashboardHeader patient={intakeData.patient} />}>
+    <AppShell>
+      <DashboardHeader patient={intakeData.patient} />
       <ChartContext items={intakeData.chartContext} />
-      <div className="mt-10 pt-10 border-t border-gray-100 grid grid-cols-1 lg:grid-cols-3">
-        <div className="lg:col-span-2 lg:pr-10">
-          <RecentEncountersCard encounters={intakeData.recentEncounters} />
+      {/* Medical background — read before encounters */}
+      <div className="px-12 py-10 border-b border-gray-100">
+        <div className="grid grid-cols-2">
+          <div className="pr-16">
+            <ConditionsCard conditions={intakeData.conditions} />
+          </div>
+          <div className="border-l border-gray-100 pl-16">
+            <AllergiesCard allergies={intakeData.allergies} />
+          </div>
         </div>
-        <div className="mt-10 lg:mt-0 lg:pl-10 lg:border-l lg:border-gray-100 space-y-10">
-          <AllergiesCard allergies={intakeData.allergies} />
-          <ConditionsCard conditions={intakeData.conditions} />
-        </div>
+      </div>
+
+      {/* Encounter history — chronological context */}
+      <div className="px-12 py-10">
+        <RecentEncountersCard encounters={intakeData.recentEncounters} />
       </div>
     </AppShell>
   );

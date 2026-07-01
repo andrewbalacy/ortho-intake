@@ -6,42 +6,54 @@ interface Props {
 
 export default function DashboardHeader({ patient }: Props) {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
-      {/* Breadcrumb with appointment type badge */}
-      <div className="flex items-center gap-2.5 mb-5">
-        <span className="text-xs font-medium uppercase tracking-widest text-gray-400">
+    <header className="px-12 pt-14 pb-12 border-b border-gray-100">
+      {/* Eyebrow */}
+      <div className="flex items-center gap-3 mb-7">
+        <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400">
           Patient Intake
         </span>
-        <span className="text-gray-300 select-none">·</span>
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-brand/10 text-brand tracking-wide">
+        <span className="text-gray-200 select-none">·</span>
+        <span className="text-[11px] font-medium text-brand bg-brand/10 px-2.5 py-0.5 rounded-full">
           {patient.appointmentType}
         </span>
       </div>
 
-      {/* Hero: patient name */}
-      <h1 className="text-4xl font-semibold tracking-tight text-gray-900">
+      {/* Patient name — the hero */}
+      <h1 className="text-5xl font-semibold tracking-tight text-gray-900 leading-none">
         {patient.name}
       </h1>
-      <p className="mt-2.5 text-sm text-gray-500">
-        {patient.age} y/o · {patient.sex} · DOB {patient.dob} · MRN{" "}
-        <span className="font-mono tracking-tight text-gray-600">{patient.mrn}</span>
-      </p>
+
+      {/* Demographics */}
+      <div className="mt-5 flex items-center gap-4 flex-wrap">
+        <span className="text-sm text-gray-500">{patient.age} years old</span>
+        <span className="text-gray-200 select-none">·</span>
+        <span className="text-sm text-gray-500">{patient.sex}</span>
+        <span className="text-gray-200 select-none">·</span>
+        <span className="text-sm text-gray-500">DOB {patient.dob}</span>
+        <span className="text-gray-200 select-none">·</span>
+        <span className="text-sm text-gray-500">
+          MRN{" "}
+          <span className="font-mono text-gray-700 tracking-tight">{patient.mrn}</span>
+        </span>
+      </div>
 
       {/* Clinical metadata */}
-      <div className="mt-8 pt-8 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="mt-10 grid grid-cols-2 gap-10 max-w-xl">
         <div>
-          <p className="text-[11px] uppercase tracking-widest font-semibold text-gray-400 mb-1.5">
+          <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-2">
             Reason for Visit
           </p>
-          <p className="text-base font-medium text-gray-900">{patient.reasonForVisit}</p>
+          <p className="text-lg font-medium text-gray-900 leading-snug">
+            {patient.reasonForVisit}
+          </p>
         </div>
         <div>
-          <p className="text-[11px] uppercase tracking-widest font-semibold text-gray-400 mb-1.5">
-            Primary Provider
+          <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-2">
+            Provider
           </p>
-          <p className="text-base text-gray-500">{patient.provider}</p>
+          <p className="text-lg text-gray-400 leading-snug">{patient.provider}</p>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
