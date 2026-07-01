@@ -163,12 +163,25 @@ export function transformAllergies(
 // Encounters
 // ---------------------------------------------------------------------------
 
+// Single source of truth for encounter date extraction.
+// Uses period.start with period.end as fallback so partially-documented
+// encounters still sort deterministically. Returns 0 (epoch) only when
+// neither field is present, placing those encounters last when sorted desc.
+// Both sortByDate and mostRecentRawEncounter must use this helper so that
+// transformEncounters and the reason-for-visit selection always agree on rank.
+function getEncounterDate(encounter: FHIREncounter): number {
+  const dateStr = encounter.period?.start ?? encounter.period?.end;
+  return dateStr ? new Date(dateStr).getTime() : 0;
+}
+
+function hasPeriod(encounter: FHIREncounter): boolean {
+  return !!(encounter.period?.start || encounter.period?.end);
+}
+
 function sortByDate(encounters: FHIREncounter[]): FHIREncounter[] {
-  return [...encounters].sort((a, b) => {
-    const da = new Date(a.period?.start ?? 0).getTime();
-    const db = new Date(b.period?.start ?? 0).getTime();
-    return db - da; // most recent first
-  });
+  return [...encounters].sort(
+    (a, b) => getEncounterDate(b) - getEncounterDate(a),
+  );
 }
 
 export function transformEncounters(
@@ -176,7 +189,7 @@ export function transformEncounters(
 ): Encounter[] {
   const raw = (bundle.entry ?? [])
     .map((e) => e.resource)
-    .filter((e) => e.period?.start); // only encounters with a date
+    .filter(hasPeriod);
 
   return sortByDate(raw)
     .slice(0, 5)
@@ -186,21 +199,25 @@ export function transformEncounters(
         e.type?.[0]?.coding?.[0]?.display ??
         e.class?.display ??
         "Clinical encounter";
+      const dateStr = (e.period?.start ?? e.period?.end)!;
       return {
         type: cleanDisplay(typeRaw),
-        date: e.period!.start!.slice(0, 10),
+        date: dateStr.slice(0, 10),
       };
     });
 }
 
-// Exposed separately so the service can identify the most recent raw encounter
-// for extracting reason-for-visit and appointment type context.
+// Returns the raw FHIREncounter with the most recent period date.
+// The service passes this to transformPatient so reason-for-visit and
+// appointment type derive from the same encounter that leads the history list.
+// Must use the same hasPeriod filter and sortByDate helper as transformEncounters
+// so both views always agree on which encounter is "most recent".
 export function mostRecentRawEncounter(
   bundle: FHIRBundle<FHIREncounter>,
 ): FHIREncounter | undefined {
   const withDates = (bundle.entry ?? [])
     .map((e) => e.resource)
-    .filter((e) => e.period?.start);
+    .filter(hasPeriod);
   return sortByDate(withDates)[0];
 }
 

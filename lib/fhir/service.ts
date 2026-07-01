@@ -19,6 +19,14 @@ import type { IntakeData, PatientSummary } from "@/types/patient";
 import type { ExplorerData } from "@/types/explorer";
 import { scorePatient } from "@/lib/relevance";
 
+// Both fetchIntakeData and fetchExplorerData must use this count so that
+// mostRecentRawEncounter operates on an identical candidate pool in each view.
+// The FHIR server returns bundle entries in an unspecified order (not sorted by
+// date), so a smaller count can miss the most-recently-dated encounter entirely,
+// causing the two views to select different encounters and disagree on
+// Reason for Visit, appointment type, and encounter history.
+const ENCOUNTER_FETCH_COUNT = 50;
+
 // Resolves which patient to load.
 // Priority: explicit ID argument → FHIR_PATIENT_ID env var → first sandbox patient.
 async function resolvePatient(patientId?: string): Promise<FHIRPatient> {
@@ -84,7 +92,7 @@ export async function fetchExplorerData(patientId?: string): Promise<ExplorerDat
   const [conditionsResult, allergiesResult, encountersResult] = await Promise.allSettled([
     fhirFetch<FHIRBundle<FHIRCondition>>(`/Condition?patient=${pid}&_count=50`),
     fhirFetch<FHIRBundle<FHIRAllergyIntolerance>>(`/AllergyIntolerance?patient=${pid}&_count=50`),
-    fhirFetch<FHIRBundle<FHIREncounter>>(`/Encounter?patient=${pid}&_count=50`),
+    fhirFetch<FHIRBundle<FHIREncounter>>(`/Encounter?patient=${pid}&_count=${ENCOUNTER_FETCH_COUNT}`),
   ]);
 
   const condBundle =
@@ -153,7 +161,7 @@ export async function fetchIntakeData(patientId?: string): Promise<IntakeData> {
         `/AllergyIntolerance?patient=${pid}`,
       ),
       fhirFetch<FHIRBundle<FHIREncounter>>(
-        `/Encounter?patient=${pid}&_count=10`,
+        `/Encounter?patient=${pid}&_count=${ENCOUNTER_FETCH_COUNT}`,
       ),
     ]);
 
