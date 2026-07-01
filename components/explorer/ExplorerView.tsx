@@ -22,6 +22,13 @@ const RESOURCE_ROLE: Record<ResourceType, string> = {
     "Recent encounters populate the chart history panel and contribute the most recent reason-for-visit and appointment type.",
 };
 
+const RESOURCE_COLOR: Record<ResourceType, { bg: string; text: string; dot: string }> = {
+  Patient: { bg: "bg-blue-50", text: "text-blue-600", dot: "bg-blue-400" },
+  Condition: { bg: "bg-emerald-50", text: "text-emerald-600", dot: "bg-emerald-400" },
+  AllergyIntolerance: { bg: "bg-amber-50", text: "text-amber-600", dot: "bg-amber-400" },
+  Encounter: { bg: "bg-violet-50", text: "text-violet-600", dot: "bg-violet-400" },
+};
+
 const JSON_PREVIEW_LIMIT = 3;
 
 // ---------------------------------------------------------------------------
@@ -59,52 +66,71 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
   ];
 
   return (
-    <>
-      {/* Header */}
-      <header className="px-10 pt-10 pb-8 border-b border-gray-100">
-        <div className="mb-5">
-          <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400">
+    <div className="p-6 space-y-5">
+      {/* Header card */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 pt-7 pb-7">
+        <div className="flex items-center gap-2 mb-5">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
             FHIR Explorer
           </span>
+          <svg
+            className="w-3 h-3 text-gray-300"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+          <span className="text-[11px] font-semibold text-brand bg-brand/10 px-2.5 py-0.5 rounded-full">
+            R4 Resources
+          </span>
         </div>
-        <h1 className="text-5xl font-semibold tracking-tight text-gray-900 leading-none">
+        <h1 className="text-[2.75rem] font-bold tracking-tight text-gray-900 leading-none">
           {data.intake.patient.name}
         </h1>
-        <p className="mt-4 text-sm text-gray-500 max-w-xl leading-relaxed">
+        <p className="mt-3.5 text-sm text-gray-500 max-w-xl leading-relaxed">
           Raw FHIR R4 resources from the SMART Health IT sandbox, alongside the
           values OrthoIntake extracts for clinical intake workflows.
         </p>
-      </header>
+      </div>
 
       {/* Body: resource group list + detail panel */}
-      <div className="flex min-h-[60vh]">
+      <div className="flex gap-5 items-start">
         {/* Left: resource groups */}
-        <div className="w-64 shrink-0 border-r border-gray-100 py-8 px-4">
-          <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-gray-400 px-3 mb-3">
+        <div className="w-56 shrink-0 bg-white rounded-xl border border-gray-100 shadow-sm py-5 px-3">
+          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-gray-400 px-3 mb-3">
             Resource Groups
           </p>
           <ul className="space-y-0.5">
             {groups.map((g) => {
               const isActive = selected === g.type;
+              const color = RESOURCE_COLOR[g.type];
               return (
                 <li key={g.type}>
                   <button
                     onClick={() => setSelected(g.type)}
-                    className={`w-full text-left px-3 py-2.5 rounded-lg relative transition-colors ${
-                      isActive ? "bg-brand/10" : "hover:bg-gray-50"
+                    className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors ${
+                      isActive ? color.bg : "hover:bg-gray-50"
                     }`}
                   >
-                    {isActive && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-brand rounded-r-full" />
-                    )}
-                    <div className="flex items-center justify-between pl-1">
-                      <span
-                        className={`text-[13px] font-medium ${
-                          isActive ? "text-brand" : "text-gray-700"
-                        }`}
-                      >
-                        {g.type}
-                      </span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                            g.ok ? color.dot : "bg-red-400"
+                          }`}
+                        />
+                        <span
+                          className={`text-[13px] font-medium ${
+                            isActive ? color.text : "text-gray-700"
+                          }`}
+                        >
+                          {g.type}
+                        </span>
+                      </div>
                       <span
                         className={`text-[10px] font-mono ${
                           g.ok ? "text-gray-400" : "text-red-400"
@@ -114,12 +140,12 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
                       </span>
                     </div>
                     <p
-                      className={`text-[10px] mt-0.5 pl-1 ${
+                      className={`text-[10px] mt-0.5 pl-3.5 ${
                         g.ok ? "text-gray-400" : "text-red-400"
                       }`}
                     >
                       {g.ok
-                        ? `${g.count} resource${g.count !== 1 ? "s" : ""} loaded`
+                        ? `${g.count} resource${g.count !== 1 ? "s" : ""}`
                         : (g.error ?? "Fetch failed")}
                     </p>
                   </button>
@@ -130,11 +156,11 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
         </div>
 
         {/* Right: detail panel */}
-        <div className="flex-1 py-8 px-10 max-w-3xl">
+        <div className="flex-1 min-w-0 bg-white rounded-xl border border-gray-100 shadow-sm p-8">
           <ResourceDetailPanel selected={selected} data={data} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -149,33 +175,39 @@ function ResourceDetailPanel({
   selected: ResourceType;
   data: ExplorerData;
 }) {
+  const color = RESOURCE_COLOR[selected];
+
   return (
     <div>
       {/* Resource type + role */}
       <div className="mb-6">
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-2">
-          {selected}
-        </p>
+        <div className="flex items-center gap-2 mb-3">
+          <span
+            className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${color.bg} ${color.text}`}
+          >
+            {selected}
+          </span>
+        </div>
         <p className="text-sm text-gray-600 leading-relaxed max-w-xl">
           {RESOURCE_ROLE[selected]}
         </p>
       </div>
 
-      <div className="border-t border-gray-100 my-7" />
+      <div className="border-t border-gray-100 my-6" />
 
       {/* Extracted values */}
       <section className="mb-8">
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-5">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-4">
           Extracted by OrthoIntake
         </p>
         <ExtractedValues selected={selected} data={data} />
       </section>
 
-      <div className="border-t border-gray-100 my-7" />
+      <div className="border-t border-gray-100 my-6" />
 
       {/* Raw FHIR JSON */}
       <section>
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-3">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-3">
           Raw FHIR JSON
         </p>
         <RawJsonPanel selected={selected} data={data} />
@@ -213,7 +245,9 @@ function ExtractedValues({
           ] as [string, string][]
         ).map(([label, value]) => (
           <div key={label} className="flex gap-6">
-            <dt className="w-36 shrink-0 text-[11px] text-gray-400 pt-0.5">{label}</dt>
+            <dt className="w-36 shrink-0 text-[11px] text-gray-400 pt-0.5">
+              {label}
+            </dt>
             <dd className="text-[13px] font-mono text-gray-800">{value}</dd>
           </div>
         ))}
@@ -229,7 +263,7 @@ function ExtractedValues({
       <ul className="space-y-2.5">
         {intake.conditions.map((c) => (
           <li key={c.name} className="flex items-start gap-3">
-            <span className="mt-[7px] w-1 h-1 rounded-full bg-gray-300 shrink-0" />
+            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
             <span className="text-sm text-gray-800">{c.name}</span>
           </li>
         ))}
@@ -245,7 +279,7 @@ function ExtractedValues({
       <ul className="space-y-2.5">
         {intake.allergies.map((a) => (
           <li key={a.substance} className="flex items-start gap-3">
-            <span className="mt-[7px] w-1 h-1 rounded-full bg-gray-300 shrink-0" />
+            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
             <span className="text-sm text-gray-800">{a.substance}</span>
           </li>
         ))}
@@ -313,10 +347,10 @@ function RawJsonPanel({
 
   return (
     <details className="border border-gray-100 rounded-lg overflow-hidden">
-      <summary className="px-4 py-3 bg-gray-50 text-[12px] text-gray-500 cursor-pointer hover:bg-gray-100 select-none">
+      <summary className="px-4 py-3 bg-gray-50 text-[12px] text-gray-500 cursor-pointer hover:bg-gray-100 select-none transition-colors">
         {summaryLabel}
       </summary>
-      <pre className="px-4 py-4 text-[11px] font-mono text-gray-600 overflow-auto max-h-[400px] leading-relaxed">
+      <pre className="px-4 py-4 text-[11px] font-mono text-gray-600 overflow-auto max-h-[400px] leading-relaxed bg-white">
         <code>{JSON.stringify(jsonPayload, null, 2)}</code>
       </pre>
     </details>

@@ -9,9 +9,9 @@ interface Props {
 
 export default function AppShell({ children, patientList, currentPatientId }: Props) {
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen bg-surface">
       <Sidebar patients={patientList} currentPatientId={currentPatientId} />
-      <main className="flex-1 min-w-0">{children}</main>
+      <main className="flex-1 min-w-0 bg-surface">{children}</main>
     </div>
   );
 }

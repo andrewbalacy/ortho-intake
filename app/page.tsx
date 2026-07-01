@@ -1,5 +1,6 @@
 import AppShell from "@/components/layout/AppShell";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import SummaryCards from "@/components/dashboard/SummaryCards";
 import ChartContext from "@/components/dashboard/ChartContext";
 import AllergiesCard from "@/components/patient/AllergiesCard";
 import ConditionsCard from "@/components/patient/ConditionsCard";
@@ -28,24 +29,30 @@ export default async function Home({
       patientList={patientList}
       currentPatientId={intake.patient.fhirId}
     >
-      <DashboardHeader patient={intake.patient} />
-      <ChartContext items={intake.chartContext} />
+      <div className="p-6 space-y-5">
+        {/* Patient hero card */}
+        <DashboardHeader patient={intake.patient} />
 
-      {/* Medical background — conditions and allergies before encounter history */}
-      <div className="px-10 py-8 border-b border-gray-100">
-        <div className="grid grid-cols-2 max-w-3xl">
-          <div className="pr-10">
-            <ConditionsCard conditions={intake.conditions} />
-          </div>
-          <div className="border-l border-gray-100 pl-10">
-            <AllergiesCard allergies={intake.allergies} />
-          </div>
+        {/* Summary cards row */}
+        <SummaryCards
+          appointmentType={intake.patient.appointmentType}
+          conditions={intake.conditions}
+          encounters={intake.recentEncounters}
+          allergies={intake.allergies}
+        />
+
+        {/* Pre-intake briefing */}
+        <ChartContext items={intake.chartContext} />
+
+        {/* Clinical cards grid */}
+        <div className="grid grid-cols-3 gap-5">
+          <ConditionsCard conditions={intake.conditions} />
+          <AllergiesCard allergies={intake.allergies} />
+          <RecentEncountersCard
+            encounters={intake.recentEncounters}
+            patientId={intake.patient.fhirId}
+          />
         </div>
-      </div>
-
-      {/* Encounter history */}
-      <div className="px-10 py-8">
-        <RecentEncountersCard encounters={intake.recentEncounters} />
       </div>
     </AppShell>
   );
