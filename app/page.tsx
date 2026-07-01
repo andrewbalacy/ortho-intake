@@ -4,13 +4,31 @@ import ChartContext from "@/components/dashboard/ChartContext";
 import AllergiesCard from "@/components/patient/AllergiesCard";
 import ConditionsCard from "@/components/patient/ConditionsCard";
 import RecentEncountersCard from "@/components/patient/RecentEncountersCard";
-import { fetchIntakeData } from "@/lib/fhir/service";
+import { fetchIntakeData, fetchPatientList } from "@/lib/fhir/service";
 
-export default async function Home() {
-  const intakeData = await fetchIntakeData();
+// searchParams is a Promise in Next.js 16 — must be awaited.
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ patient?: string }>;
+}) {
+  const { patient: urlPatientId } = await searchParams;
+
+  // URL param takes priority; env var is the pinned demo fallback;
+  // service resolves to first sandbox patient if neither is set.
+  const resolvedId = urlPatientId ?? process.env.FHIR_PATIENT_ID;
+
+  // Patient list and intake data are independent — fetch in parallel.
+  const [patientList, intakeData] = await Promise.all([
+    fetchPatientList(),
+    fetchIntakeData(resolvedId),
+  ]);
 
   return (
-    <AppShell>
+    <AppShell
+      patientList={patientList}
+      currentPatientId={intakeData.patient.fhirId}
+    >
       <DashboardHeader patient={intakeData.patient} />
       <ChartContext items={intakeData.chartContext} />
 

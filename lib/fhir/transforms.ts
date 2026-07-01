@@ -5,7 +5,7 @@ import type {
   FHIREncounter,
   FHIRBundle,
 } from "./types";
-import type { Patient, Condition, Allergy, Encounter } from "@/types/patient";
+import type { Patient, PatientSummary, Condition, Allergy, Encounter } from "@/types/patient";
 
 // ---------------------------------------------------------------------------
 // Patient
@@ -86,6 +86,7 @@ export function transformPatient(
   mostRecentEncounter?: FHIREncounter,
 ): Patient {
   return {
+    fhirId: patient.id,
     name: extractName(patient),
     age: calculateAge(patient.birthDate),
     dob: formatDOB(patient.birthDate),
@@ -94,6 +95,15 @@ export function transformPatient(
     reasonForVisit: extractReasonForVisit(mostRecentEncounter),
     appointmentType: extractAppointmentType(mostRecentEncounter),
     provider: "—",
+  };
+}
+
+export function transformPatientSummary(patient: FHIRPatient): PatientSummary {
+  return {
+    id: patient.id,
+    name: extractName(patient),
+    age: calculateAge(patient.birthDate),
+    sex: formatSex(patient.gender),
   };
 }
 

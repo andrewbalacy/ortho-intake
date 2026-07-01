@@ -8,23 +8,24 @@ import type {
 } from "./types";
 import {
   transformPatient,
+  transformPatientSummary,
   transformConditions,
   transformAllergies,
   transformEncounters,
   mostRecentRawEncounter,
   buildChartContext,
 } from "./transforms";
-import type { IntakeData } from "@/types/patient";
+import type { IntakeData, PatientSummary } from "@/types/patient";
 
-// Resolves the patient to use for the intake view.
-// Prefers FHIR_PATIENT_ID env var; falls back to the first patient
-// returned by the sandbox so the app works without configuration.
-async function resolvePatient(): Promise<FHIRPatient> {
-  const configured = process.env.FHIR_PATIENT_ID;
-  if (configured) {
-    return fhirFetch<FHIRPatient>(`/Patient/${configured}`);
+// Resolves which patient to load.
+// Priority: explicit ID argument → FHIR_PATIENT_ID env var → first sandbox patient.
+async function resolvePatient(patientId?: string): Promise<FHIRPatient> {
+  const id = patientId ?? process.env.FHIR_PATIENT_ID;
+  if (id) {
+    return fhirFetch<FHIRPatient>(`/Patient/${id}`);
   }
 
+  // No patient configured — fall back to first available synthetic patient
   const bundle = await fhirFetch<FHIRBundle<FHIRPatient>>(
     "/Patient?_count=1&_sort=_id",
   );
@@ -35,13 +36,25 @@ async function resolvePatient(): Promise<FHIRPatient> {
   return patient;
 }
 
-export async function fetchIntakeData(): Promise<IntakeData> {
-  const patientData = await resolvePatient();
+// Fetches a short list of patients for the sidebar selector.
+export async function fetchPatientList(): Promise<PatientSummary[]> {
+  const bundle = await fhirFetch<FHIRBundle<FHIRPatient>>(
+    "/Patient?_count=10&_sort=_id",
+  );
+  return (bundle.entry ?? [])
+    .map((e) => e.resource)
+    .filter((p) => p.id)
+    .map(transformPatientSummary);
+}
+
+// Fetches and transforms all intake data for a given patient.
+// Accepts an optional patient ID; falls back to env var or first sandbox patient.
+export async function fetchIntakeData(patientId?: string): Promise<IntakeData> {
+  const patientData = await resolvePatient(patientId);
   const pid = patientData.id;
 
   // Fetch clinical resources in parallel.
-  // Individual resource failures degrade gracefully to empty arrays
-  // so a missing Condition bundle never blocks the rest of the view.
+  // Individual failures degrade gracefully to empty arrays.
   const [conditionsResult, allergiesResult, encountersResult] =
     await Promise.allSettled([
       fhirFetch<FHIRBundle<FHIRCondition>>(`/Condition?patient=${pid}`),
@@ -68,8 +81,6 @@ export async function fetchIntakeData(): Promise<IntakeData> {
       ? transformEncounters(encountersResult.value)
       : [];
 
-  // Most recent encounter in raw form — used to populate reason-for-visit
-  // and appointment type, which live on Encounter not Patient in FHIR R4.
   const latestEncounter =
     encountersResult.status === "fulfilled"
       ? mostRecentRawEncounter(encountersResult.value)

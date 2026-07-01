@@ -1,3 +1,6 @@
+import PatientList from "./PatientList";
+import type { PatientSummary } from "@/types/patient";
+
 interface NavItemProps {
   label: string;
   active?: boolean;
@@ -29,11 +32,16 @@ function NavItem({ label, active, future }: NavItemProps) {
   );
 }
 
-export default function Sidebar() {
+interface Props {
+  patients?: PatientSummary[];
+  currentPatientId?: string;
+}
+
+export default function Sidebar({ patients, currentPatientId }: Props) {
   return (
-    <aside className="w-52 shrink-0 min-h-screen bg-white border-r border-gray-100 flex flex-col py-8">
+    <aside className="w-52 shrink-0 min-h-screen bg-white border-r border-gray-100 flex flex-col">
       {/* Wordmark */}
-      <div className="px-5 mb-8">
+      <div className="px-5 pt-8 pb-6 flex-shrink-0">
         <div className="flex items-center gap-2.5">
           <div className="w-2 h-2 rounded-full bg-brand flex-shrink-0" />
           <span className="text-[13px] font-semibold tracking-tight text-gray-900">
@@ -43,15 +51,28 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-0.5">
+      <nav className="px-3 space-y-0.5 flex-shrink-0">
         <NavItem label="Patient Intake" active />
         <NavItem label="FHIR Explorer" future />
         <NavItem label="Encounter Timeline" future />
         <NavItem label="About" future />
       </nav>
 
+      {/* Patient list */}
+      {patients && patients.length > 0 && currentPatientId !== undefined && (
+        <div className="mt-4 pt-4 border-t border-gray-100 px-3 flex-shrink-0">
+          <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-gray-400 px-3 mb-2">
+            Patients
+          </p>
+          <PatientList patients={patients} currentPatientId={currentPatientId} />
+        </div>
+      )}
+
+      {/* Spacer */}
+      <div className="flex-1" />
+
       {/* SMART Sandbox status */}
-      <div className="px-5 pt-5 border-t border-gray-100">
+      <div className="px-5 py-5 border-t border-gray-100 flex-shrink-0">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
           <span className="text-[11px] text-gray-500">SMART Sandbox</span>
