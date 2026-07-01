@@ -1,14 +1,36 @@
-export default function AppShell({ children }: { children: React.ReactNode }) {
+interface Props {
+  header?: React.ReactNode;
+  children: React.ReactNode;
+}
+
+export default function AppShell({ header, children }: Props) {
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 px-6 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-blue-700 font-semibold text-base tracking-tight">OrthoIntake</span>
-          <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded font-medium">v0.1</span>
+      {/* Unified chrome: nav + patient header share one elevated white block */}
+      <div className="bg-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
+        <nav>
+          <div className="max-w-5xl mx-auto px-6 py-3.5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-brand tracking-tight">OrthoIntake</span>
+              <span className="text-gray-200 select-none">|</span>
+              <span className="text-sm text-gray-400">Clinical Intake Dashboard</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <span>FHIR R4 Sandbox</span>
+              <span className="text-gray-300">·</span>
+              <span>Synthetic Data</span>
+            </div>
+          </div>
+        </nav>
+        {header && <div className="border-t border-gray-100">{header}</div>}
+      </div>
+
+      {/* Content canvas: white surface floating on gray-50 */}
+      <main className="max-w-5xl mx-auto px-6 py-8">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 py-8">
+          {children}
         </div>
-        <span className="text-xs text-gray-400 font-medium">Prototype · Synthetic Data Only</span>
-      </nav>
-      <main className="max-w-5xl mx-auto px-6 py-8">{children}</main>
+      </main>
     </div>
   );
 }

@@ -6,29 +6,33 @@ interface Props {
 
 export default function AllergiesCard({ allergies }: Props) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500">Allergies</h2>
-        <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-          {allergies.length} on record
-        </span>
+    <section>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+          Allergies
+        </h2>
+        {allergies.length > 0 && (
+          <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
+            {allergies.length} documented
+          </span>
+        )}
       </div>
       {allergies.length === 0 ? (
         <p className="text-sm text-gray-400">No allergy documentation on file.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul>
           {allergies.map((allergy) => (
             <li
               key={allergy.substance}
-              className="flex items-center gap-2.5 text-sm text-amber-900 bg-amber-50 border border-amber-100 rounded-md px-3 py-2"
+              className="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
-              {allergy.substance}
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0" />
+              <span className="text-sm text-gray-800">{allergy.substance}</span>
             </li>
           ))}
         </ul>
       )}
-      <p className="text-xs text-gray-400 mt-3">Verify with patient at time of intake.</p>
-    </div>
+      <p className="mt-4 text-xs text-gray-400">Confirm with patient at intake.</p>
+    </section>
   );
 }

@@ -5,6 +5,8 @@ export interface Patient {
   sex: string;
   mrn: string;
   reasonForVisit: string;
+  appointmentType: string;
+  provider: string;
 }
 
 export interface Allergy {
@@ -25,4 +27,5 @@ export interface IntakeData {
   allergies: Allergy[];
   conditions: Condition[];
   recentEncounters: Encounter[];
+  chartContext: string[];
 }

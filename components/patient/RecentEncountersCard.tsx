@@ -6,28 +6,28 @@ interface Props {
 
 export default function RecentEncountersCard({ encounters }: Props) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
-        Recent Encounters
+    <section>
+      <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4">
+        Encounter History
       </h2>
       {encounters.length === 0 ? (
-        <p className="text-sm text-gray-400">No recent encounters on file.</p>
+        <p className="text-sm text-gray-400">No encounters on file.</p>
       ) : (
         <ul>
           {encounters.map((encounter, index) => (
             <li
               key={index}
-              className="flex items-start justify-between gap-4 py-2.5 border-b border-gray-100 last:border-0"
+              className="grid grid-cols-[7rem_1fr] gap-4 py-3.5 border-b border-gray-100 last:border-0"
             >
-              <span className="text-sm text-gray-800">{encounter.type}</span>
-              <span className="text-xs text-gray-400 font-medium tabular-nums flex-shrink-0">
+              <span className="text-xs font-mono text-gray-400 tabular-nums pt-0.5">
                 {encounter.date}
               </span>
+              <span className="text-sm text-gray-900">{encounter.type}</span>
             </li>
           ))}
         </ul>
       )}
-      <p className="text-xs text-gray-400 mt-3">Chart context — for reference only.</p>
-    </div>
+      <p className="mt-4 text-xs text-gray-400">Chart context — for reference only.</p>
+    </section>
   );
 }
