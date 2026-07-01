@@ -16,6 +16,7 @@ import {
   buildChartContext,
 } from "./transforms";
 import type { IntakeData, PatientSummary } from "@/types/patient";
+import type { ExplorerData } from "@/types/explorer";
 import { scorePatient } from "@/lib/relevance";
 
 // Resolves which patient to load.
@@ -71,6 +72,70 @@ export async function fetchPatientList(): Promise<PatientSummary[]> {
 
   // Higher relevance first; ties preserve original order.
   return scored.sort((a, b) => b.relevanceScore - a.relevanceScore);
+}
+
+// Fetches raw FHIR resources alongside the transformed IntakeData for the FHIR Explorer.
+// Reuses the same network calls to avoid duplication — transforms are applied to the
+// already-fetched bundles rather than calling fetchIntakeData separately.
+export async function fetchExplorerData(patientId?: string): Promise<ExplorerData> {
+  const patientData = await resolvePatient(patientId);
+  const pid = patientData.id;
+
+  const [conditionsResult, allergiesResult, encountersResult] = await Promise.allSettled([
+    fhirFetch<FHIRBundle<FHIRCondition>>(`/Condition?patient=${pid}&_count=50`),
+    fhirFetch<FHIRBundle<FHIRAllergyIntolerance>>(`/AllergyIntolerance?patient=${pid}&_count=50`),
+    fhirFetch<FHIRBundle<FHIREncounter>>(`/Encounter?patient=${pid}&_count=50`),
+  ]);
+
+  const condBundle =
+    conditionsResult.status === "fulfilled"
+      ? conditionsResult.value
+      : { resourceType: "Bundle" as const, entry: [] };
+  const allergyBundle =
+    allergiesResult.status === "fulfilled"
+      ? allergiesResult.value
+      : { resourceType: "Bundle" as const, entry: [] };
+  const encounterBundle =
+    encountersResult.status === "fulfilled"
+      ? encountersResult.value
+      : { resourceType: "Bundle" as const, entry: [] };
+
+  const conditions = transformConditions(condBundle);
+  const allergies = transformAllergies(allergyBundle);
+  const encounters = transformEncounters(encounterBundle);
+  const latestEncounter = mostRecentRawEncounter(encounterBundle);
+
+  return {
+    patient: patientData,
+    conditions: {
+      ok: conditionsResult.status === "fulfilled",
+      resources: (condBundle.entry ?? []).map((e) => e.resource),
+      error: conditionsResult.status === "rejected"
+        ? String(conditionsResult.reason)
+        : undefined,
+    },
+    allergies: {
+      ok: allergiesResult.status === "fulfilled",
+      resources: (allergyBundle.entry ?? []).map((e) => e.resource),
+      error: allergiesResult.status === "rejected"
+        ? String(allergiesResult.reason)
+        : undefined,
+    },
+    encounters: {
+      ok: encountersResult.status === "fulfilled",
+      resources: (encounterBundle.entry ?? []).map((e) => e.resource),
+      error: encountersResult.status === "rejected"
+        ? String(encountersResult.reason)
+        : undefined,
+    },
+    intake: {
+      patient: transformPatient(patientData, latestEncounter),
+      conditions,
+      allergies,
+      recentEncounters: encounters,
+      chartContext: buildChartContext(conditions, allergies, encounters),
+    },
+  };
 }
 
 // Fetches and transforms all intake data for a given patient.

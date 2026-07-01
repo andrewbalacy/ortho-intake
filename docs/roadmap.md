@@ -22,11 +22,15 @@
 - Support switching between multiple synthetic patient records
 - Handle loading and error states gracefully
 
-## v0.4 — SMART-on-FHIR Auth Exploration
+## v0.4 — FHIR Explorer ✓
 
-- Explore the SMART-on-FHIR authorization flow
-- Document findings on OAuth 2.0 launch sequences for EHR-embedded apps
-- Prototype a launch context handler if feasible with the public sandbox
+- Add `/fhir-explorer` route as a dedicated interoperability demonstration view
+- Display raw FHIR R4 resources (Patient, Condition, AllergyIntolerance, Encounter) alongside the IntakeData OrthoIntake derives from them
+- Build interactive resource group selector with extracted-value summaries and collapsible raw JSON panels
+- Extend the FHIR service layer with `fetchExplorerData` — fetches raw resources and applies transforms in a single pass with no duplicate network calls
+- Introduce `types/explorer.ts` to keep raw FHIR types isolated from the primary Patient Intake view
+- Make sidebar navigation route-aware with `usePathname`; patient list links preserve the current view when switching patients
+- Add loading skeleton and error boundary for the explorer route
 
 ## v1.0 — Portfolio-Ready Release
 

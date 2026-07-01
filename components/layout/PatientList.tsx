@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { PatientSummary } from "@/types/patient";
 
 interface Props {
@@ -7,6 +10,8 @@ interface Props {
 }
 
 export default function PatientList({ patients, currentPatientId }: Props) {
+  const pathname = usePathname();
+
   if (patients.length === 0) {
     return (
       <p className="px-3 text-[11px] text-gray-400">
@@ -23,7 +28,7 @@ export default function PatientList({ patients, currentPatientId }: Props) {
         return (
           <li key={p.id}>
             <Link
-              href={`/?patient=${p.id}`}
+              href={`${pathname}?patient=${p.id}`}
               className={`block px-3 py-2 rounded-lg transition-colors ${
                 isActive
                   ? "bg-brand/10 text-brand"
