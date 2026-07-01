@@ -1,5 +1,7 @@
 # OrthoIntake
 
+**[Live Demo →](https://ortho-intake.vercel.app/)**
+
 A clinical intake dashboard built on live FHIR R4 data, designed around the workflow of a walk-in orthopedic clinic. Rather than recreating an EHR, OrthoIntake focuses on one specific problem: reducing the time a front-desk or triage staff member spends navigating a chart before a patient is seen.
 
 Built as the health IT counterpart to [Slate](https://github.com/andrewbalacy/slate) — where Slate demonstrates general product engineering, OrthoIntake demonstrates healthcare interoperability and clinical workflow design specifically, informed by 5+ years working the floor at an orthopedic walk-in clinic.
