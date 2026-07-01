@@ -16,6 +16,7 @@ export interface PatientSummary {
   name: string;
   age: number;
   sex: string;
+  relevanceScore: number; // specialty relevance score (0 = no signal)
 }
 
 export interface Allergy {

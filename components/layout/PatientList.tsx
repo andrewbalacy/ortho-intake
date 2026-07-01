@@ -19,6 +19,7 @@ export default function PatientList({ patients, currentPatientId }: Props) {
     <ul className="space-y-0.5">
       {patients.map((p) => {
         const isActive = p.id === currentPatientId;
+        const isOrthoRelevant = p.relevanceScore > 0;
         return (
           <li key={p.id}>
             <Link
@@ -38,6 +39,11 @@ export default function PatientList({ patients, currentPatientId }: Props) {
               </span>
               <span className="block text-[10px] text-gray-400 mt-0.5">
                 {p.age}y · {p.sex}
+                {isOrthoRelevant && (
+                  <span className="ml-1.5 text-[9px] text-blue-400 font-medium tracking-wide uppercase">
+                    Ortho
+                  </span>
+                )}
               </span>
             </Link>
           </li>

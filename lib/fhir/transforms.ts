@@ -104,6 +104,7 @@ export function transformPatientSummary(patient: FHIRPatient): PatientSummary {
     name: extractName(patient),
     age: calculateAge(patient.birthDate),
     sex: formatSex(patient.gender),
+    relevanceScore: 0, // overwritten by the service after scoring
   };
 }
 

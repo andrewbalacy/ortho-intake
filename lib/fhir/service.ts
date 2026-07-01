@@ -16,6 +16,7 @@ import {
   buildChartContext,
 } from "./transforms";
 import type { IntakeData, PatientSummary } from "@/types/patient";
+import { scorePatient } from "@/lib/relevance";
 
 // Resolves which patient to load.
 // Priority: explicit ID argument → FHIR_PATIENT_ID env var → first sandbox patient.
@@ -36,15 +37,40 @@ async function resolvePatient(patientId?: string): Promise<FHIRPatient> {
   return patient;
 }
 
-// Fetches a short list of patients for the sidebar selector.
+// Fetches a candidate pool of patients, scores each for orthopedic relevance,
+// and returns them sorted highest-score first. Zero-score patients still appear.
 export async function fetchPatientList(): Promise<PatientSummary[]> {
   const bundle = await fhirFetch<FHIRBundle<FHIRPatient>>(
-    "/Patient?_count=10&_sort=_id",
+    "/Patient?_count=20&_sort=_id",
   );
-  return (bundle.entry ?? [])
+
+  const patients = (bundle.entry ?? [])
     .map((e) => e.resource)
-    .filter((p) => p.id)
-    .map(transformPatientSummary);
+    .filter((p) => p.id);
+
+  if (patients.length === 0) return [];
+
+  // Fetch conditions for all candidates in parallel; individual failures are tolerated.
+  const conditionResults = await Promise.allSettled(
+    patients.map((p) =>
+      fhirFetch<FHIRBundle<FHIRCondition>>(`/Condition?patient=${p.id}&_count=50`),
+    ),
+  );
+
+  const scored: PatientSummary[] = patients.map((patient, i) => {
+    const condBundle =
+      conditionResults[i].status === "fulfilled"
+        ? conditionResults[i].value
+        : { resourceType: "Bundle" as const, entry: [] };
+
+    const conditionNames = transformConditions(condBundle).map((c) => c.name);
+    const relevanceScore = scorePatient(conditionNames);
+
+    return { ...transformPatientSummary(patient), relevanceScore };
+  });
+
+  // Higher relevance first; ties preserve original order.
+  return scored.sort((a, b) => b.relevanceScore - a.relevanceScore);
 }
 
 // Fetches and transforms all intake data for a given patient.
