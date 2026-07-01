@@ -6,9 +6,9 @@ interface Props {
 
 export default function DashboardHeader({ patient }: Props) {
   return (
-    <header className="px-12 pt-14 pb-12 border-b border-gray-100">
+    <header className="px-10 pt-10 pb-9 border-b border-gray-100">
       {/* Eyebrow */}
-      <div className="flex items-center gap-3 mb-7">
+      <div className="flex items-center gap-3 mb-5">
         <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400">
           Patient Intake
         </span>
@@ -25,25 +25,25 @@ export default function DashboardHeader({ patient }: Props) {
 
       {/* Demographics */}
       <div className="mt-5 flex items-center gap-4 flex-wrap">
-        <span className="text-sm text-gray-500">{patient.age} years old</span>
+        <span className="text-sm text-gray-600">{patient.age} years old</span>
         <span className="text-gray-200 select-none">·</span>
-        <span className="text-sm text-gray-500">{patient.sex}</span>
+        <span className="text-sm text-gray-600">{patient.sex}</span>
         <span className="text-gray-200 select-none">·</span>
-        <span className="text-sm text-gray-500">DOB {patient.dob}</span>
+        <span className="text-sm text-gray-600">DOB {patient.dob}</span>
         <span className="text-gray-200 select-none">·</span>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-600">
           MRN{" "}
           <span className="font-mono text-gray-700 tracking-tight">{patient.mrn}</span>
         </span>
       </div>
 
       {/* Clinical metadata */}
-      <div className="mt-10 grid grid-cols-2 gap-10 max-w-xl">
+      <div className="mt-8 grid grid-cols-2 gap-8 max-w-md">
         <div>
           <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-2">
             Reason for Visit
           </p>
-          <p className="text-lg font-medium text-gray-900 leading-snug">
+          <p className="text-[15px] font-medium text-gray-900 leading-snug">
             {patient.reasonForVisit}
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function DashboardHeader({ patient }: Props) {
           <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-2">
             Provider
           </p>
-          <p className="text-lg text-gray-400 leading-snug">{patient.provider}</p>
+          <p className="text-[15px] text-gray-400 leading-snug">{patient.provider}</p>
         </div>
       </div>
     </header>

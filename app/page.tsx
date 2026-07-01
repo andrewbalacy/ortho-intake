@@ -32,19 +32,19 @@ export default async function Home({
       <ChartContext items={intake.chartContext} />
 
       {/* Medical background — conditions and allergies before encounter history */}
-      <div className="px-12 py-10 border-b border-gray-100">
-        <div className="grid grid-cols-2">
-          <div className="pr-16">
+      <div className="px-10 py-8 border-b border-gray-100">
+        <div className="grid grid-cols-2 max-w-3xl">
+          <div className="pr-10">
             <ConditionsCard conditions={intake.conditions} />
           </div>
-          <div className="border-l border-gray-100 pl-16">
+          <div className="border-l border-gray-100 pl-10">
             <AllergiesCard allergies={intake.allergies} />
           </div>
         </div>
       </div>
 
       {/* Encounter history */}
-      <div className="px-12 py-10">
+      <div className="px-10 py-8">
         <RecentEncountersCard encounters={intake.recentEncounters} />
       </div>
     </AppShell>

@@ -22,8 +22,8 @@ export default function AboutPage() {
   return (
     <AppShell>
       {/* Header */}
-      <header className="px-12 pt-14 pb-12 border-b border-gray-100">
-        <div className="flex items-center gap-3 mb-7">
+      <header className="px-10 pt-10 pb-8 border-b border-gray-100">
+        <div className="flex items-center gap-3 mb-5">
           <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400">
             Project Overview
           </span>
@@ -35,14 +35,14 @@ export default function AboutPage() {
         <h1 className="text-5xl font-semibold tracking-tight text-gray-900 leading-none">
           OrthoIntake
         </h1>
-        <p className="mt-5 text-lg text-gray-500 max-w-xl leading-relaxed">
+        <p className="mt-4 text-base text-gray-500 max-w-xl leading-relaxed">
           A SMART on FHIR clinical intake dashboard for orthopedic workflows.
         </p>
       </header>
 
       {/* What it is / Why it exists */}
-      <div className="px-12 py-10 border-b border-gray-100">
-        <div className="grid grid-cols-2 gap-16 max-w-3xl">
+      <div className="px-10 py-8 border-b border-gray-100">
+        <div className="grid grid-cols-2 gap-12 max-w-3xl">
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-5">
               What it is
@@ -67,8 +67,8 @@ export default function AboutPage() {
       </div>
 
       {/* Core capabilities */}
-      <div className="px-12 py-10 border-b border-gray-100">
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-8">
+      <div className="px-10 py-8 border-b border-gray-100">
+        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-6">
           Core Capabilities
         </p>
         <ul className="space-y-3.5 max-w-2xl">
@@ -82,14 +82,14 @@ export default function AboutPage() {
       </div>
 
       {/* Technical architecture */}
-      <div className="px-12 py-10 border-b border-gray-100">
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-8">
+      <div className="px-10 py-8 border-b border-gray-100">
+        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-6">
           Technical Architecture
         </p>
-        <div className="space-y-4 max-w-2xl">
+        <div className="space-y-3.5 max-w-2xl">
           {ARCHITECTURE.map(([label, detail]) => (
             <div key={label} className="flex items-baseline gap-6">
-              <span className="text-[11px] text-gray-400 w-28 shrink-0">{label}</span>
+              <span className="text-[12px] text-gray-500 w-32 shrink-0">{label}</span>
               <span className="text-sm text-gray-700 leading-relaxed">{detail}</span>
             </div>
           ))}
@@ -97,8 +97,8 @@ export default function AboutPage() {
       </div>
 
       {/* Design decision */}
-      <div className="px-12 py-10 border-b border-gray-100">
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-5">
+      <div className="px-10 py-8 border-b border-gray-100">
+        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-4">
           Design Decision
         </p>
         <p className="text-sm text-gray-700 leading-relaxed max-w-xl">
@@ -110,14 +110,14 @@ export default function AboutPage() {
       </div>
 
       {/* Status */}
-      <div className="px-12 py-10">
-        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-5">
+      <div className="px-10 py-8">
+        <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-4">
           Current Status
         </p>
         <p className="text-sm text-gray-700">
           v1 portfolio project · Synthetic SMART sandbox data · Not for clinical use.
         </p>
-        <p className="mt-6 text-[11px] text-gray-300">
+        <p className="mt-5 text-[11px] text-gray-400">
           Built by Andrew Balacy · Portfolio — for reference only.
         </p>
       </div>

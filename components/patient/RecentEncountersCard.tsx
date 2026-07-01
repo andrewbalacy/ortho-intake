@@ -17,35 +17,35 @@ interface Props {
 export default function RecentEncountersCard({ encounters }: Props) {
   return (
     <section>
-      <h2 className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-10">
+      <h2 className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400 mb-8">
         Encounter History
       </h2>
 
       {encounters.length === 0 ? (
         <p className="text-sm text-gray-400">No encounters on file.</p>
       ) : (
-        <div>
+        <div className="max-w-lg">
           {encounters.map((encounter, index) => {
             const { year, month, day } = parseDate(encounter.date);
             const isLast = index === encounters.length - 1;
 
             return (
-              <div key={index} className="flex gap-6">
+              <div key={index} className="flex gap-5">
                 {/* Date column */}
-                <div className="w-12 flex-shrink-0 text-right pt-0.5">
+                <div className="w-11 flex-shrink-0 text-right pt-0.5">
                   <div className="text-[9px] font-medium tracking-widest text-gray-400">
                     {month}
                   </div>
-                  <div className="text-[2rem] font-extralight text-gray-900 leading-none tabular-nums mt-0.5">
+                  <div className="text-[1.75rem] font-light text-gray-800 leading-none tabular-nums mt-0.5">
                     {day}
                   </div>
                   <div className="text-[9px] text-gray-400 tabular-nums mt-0.5">{year}</div>
                 </div>
 
                 {/* Timeline spine */}
-                <div className="flex flex-col items-center flex-shrink-0 w-5">
+                <div className="flex flex-col items-center flex-shrink-0 w-4">
                   <div
-                    className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
+                    className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${
                       index === 0 ? "bg-brand" : "bg-gray-200"
                     }`}
                   />
@@ -53,8 +53,8 @@ export default function RecentEncountersCard({ encounters }: Props) {
                 </div>
 
                 {/* Encounter content */}
-                <div className={isLast ? "pb-0" : "pb-9"}>
-                  <p className="text-[15px] text-gray-900 leading-snug pt-1.5">
+                <div className={isLast ? "pb-0" : "pb-7"}>
+                  <p className="text-sm text-gray-800 leading-snug pt-1.5">
                     {encounter.type}
                   </p>
                 </div>
@@ -64,7 +64,7 @@ export default function RecentEncountersCard({ encounters }: Props) {
         </div>
       )}
 
-      <p className="mt-8 text-[11px] text-gray-300">Chart context — for reference only.</p>
+      <p className="mt-6 text-[11px] text-gray-400">Chart context — for reference only.</p>
     </section>
   );
 }

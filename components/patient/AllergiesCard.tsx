@@ -31,7 +31,7 @@ export default function AllergiesCard({ allergies }: Props) {
         </ul>
       )}
 
-      <p className="mt-5 text-[11px] text-gray-300">Confirm with patient at intake.</p>
+      <p className="mt-5 text-[11px] text-gray-400">Confirm with patient at intake.</p>
     </section>
   );
 }

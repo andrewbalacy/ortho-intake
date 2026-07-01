@@ -23,7 +23,7 @@ export default function ConditionsCard({ conditions }: Props) {
         </ul>
       )}
 
-      <p className="mt-5 text-[11px] text-gray-300">Chart context — for reference only.</p>
+      <p className="mt-5 text-[11px] text-gray-400">Chart context — for reference only.</p>
     </section>
   );
 }

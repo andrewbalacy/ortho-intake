@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import PatientList from "./PatientList";
 import type { PatientSummary } from "@/types/patient";
 
-const NAV_ITEMS: Array<{ label: string; href: string | null }> = [
+const NAV_ITEMS: Array<{ label: string; href: string }> = [
   { label: "Patient Intake", href: "/" },
   { label: "FHIR Explorer", href: "/fhir-explorer" },
   { label: "About", href: "/about" },
@@ -17,17 +17,9 @@ function NavItem({
   active,
 }: {
   label: string;
-  href: string | null;
+  href: string;
   active: boolean;
 }) {
-  if (!href) {
-    return (
-      <div className="flex items-center px-3 py-2 rounded-lg cursor-default select-none">
-        <span className="text-[13px] text-gray-300">{label}</span>
-      </div>
-    );
-  }
-
   if (active) {
     return (
       <div className="relative flex items-center px-3 py-2 rounded-lg bg-brand/10">
@@ -73,7 +65,7 @@ export default function Sidebar({ patients, currentPatientId }: Props) {
           const active =
             href === "/"
               ? pathname === "/"
-              : href !== null && pathname.startsWith(href);
+              : pathname.startsWith(href);
           return (
             <NavItem key={label} label={label} href={href} active={active} />
           );

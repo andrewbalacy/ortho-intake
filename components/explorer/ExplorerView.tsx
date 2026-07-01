@@ -61,7 +61,7 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
   return (
     <>
       {/* Header */}
-      <header className="px-12 pt-14 pb-10 border-b border-gray-100">
+      <header className="px-10 pt-10 pb-8 border-b border-gray-100">
         <div className="mb-5">
           <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400">
             FHIR Explorer
@@ -70,7 +70,7 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
         <h1 className="text-5xl font-semibold tracking-tight text-gray-900 leading-none">
           {data.intake.patient.name}
         </h1>
-        <p className="mt-5 text-sm text-gray-500 max-w-xl leading-relaxed">
+        <p className="mt-4 text-sm text-gray-500 max-w-xl leading-relaxed">
           Raw FHIR R4 resources from the SMART Health IT sandbox, alongside the
           values OrthoIntake extracts for clinical intake workflows.
         </p>
