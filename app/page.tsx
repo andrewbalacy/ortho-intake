@@ -29,7 +29,7 @@ export default async function Home({
       patientList={patientList}
       currentPatientId={intake.patient.fhirId}
     >
-      <div className="p-6 space-y-5">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-5">
         {/* Patient hero card */}
         <DashboardHeader patient={intake.patient} />
 
@@ -45,7 +45,7 @@ export default async function Home({
         <ChartContext items={intake.chartContext} />
 
         {/* Clinical cards grid */}
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
           <ConditionsCard conditions={intake.conditions} />
           <AllergiesCard allergies={intake.allergies} />
           <RecentEncountersCard

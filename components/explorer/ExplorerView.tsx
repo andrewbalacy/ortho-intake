@@ -66,9 +66,9 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
   ];
 
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-5">
       {/* Header card */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 pt-7 pb-7">
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 pt-5 pb-5 md:px-8 md:pt-7 md:pb-7">
         <div className="flex items-center gap-2 mb-5">
           <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
             FHIR Explorer
@@ -88,7 +88,7 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
             R4 Resources
           </span>
         </div>
-        <h1 className="text-[2.75rem] font-bold tracking-tight text-gray-900 leading-none">
+        <h1 className="text-[1.75rem] md:text-[2.75rem] font-bold tracking-tight text-gray-900 leading-none">
           {data.intake.patient.name}
         </h1>
         <p className="mt-3.5 text-sm text-gray-500 max-w-xl leading-relaxed">
@@ -98,9 +98,9 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
       </div>
 
       {/* Body: resource group list + detail panel */}
-      <div className="flex gap-5 items-start">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-5 items-start">
         {/* Left: resource groups */}
-        <div className="w-56 shrink-0 bg-white rounded-xl border border-gray-100 shadow-sm py-5 px-3">
+        <div className="w-full md:w-56 md:shrink-0 bg-white rounded-xl border border-gray-100 shadow-sm py-5 px-3">
           <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-gray-400 px-3 mb-3">
             Resource Groups
           </p>
@@ -156,7 +156,7 @@ export default function ExplorerView({ data }: { data: ExplorerData }) {
         </div>
 
         {/* Right: detail panel */}
-        <div className="flex-1 min-w-0 bg-white rounded-xl border border-gray-100 shadow-sm p-8">
+        <div className="flex-1 min-w-0 bg-white rounded-xl border border-gray-100 shadow-sm p-5 md:p-8">
           <ResourceDetailPanel selected={selected} data={data} />
         </div>
       </div>
@@ -244,8 +244,8 @@ function ExtractedValues({
             ["Appointment Type", p.appointmentType],
           ] as [string, string][]
         ).map(([label, value]) => (
-          <div key={label} className="flex gap-6">
-            <dt className="w-36 shrink-0 text-[11px] text-gray-400 pt-0.5">
+          <div key={label} className="flex flex-col sm:flex-row sm:gap-6 gap-0.5">
+            <dt className="sm:w-36 sm:shrink-0 text-[11px] text-gray-400 sm:pt-0.5">
               {label}
             </dt>
             <dd className="text-[13px] font-mono text-gray-800">{value}</dd>
@@ -350,7 +350,7 @@ function RawJsonPanel({
       <summary className="px-4 py-3 bg-gray-50 text-[12px] text-gray-500 cursor-pointer hover:bg-gray-100 select-none transition-colors">
         {summaryLabel}
       </summary>
-      <pre className="px-4 py-4 text-[11px] font-mono text-gray-600 overflow-auto max-h-[400px] leading-relaxed bg-white">
+      <pre className="px-4 py-4 text-[11px] font-mono text-gray-600 overflow-auto max-h-[400px] max-w-full leading-relaxed bg-white">
         <code>{JSON.stringify(jsonPayload, null, 2)}</code>
       </pre>
     </details>

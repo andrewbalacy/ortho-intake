@@ -21,9 +21,9 @@ const ARCHITECTURE: [string, string][] = [
 export default function AboutPage() {
   return (
     <AppShell>
-      <div className="p-6 space-y-5">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-5">
         {/* Header card */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 pt-7 pb-7">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 pt-5 pb-5 md:px-8 md:pt-7 md:pb-7">
           <div className="flex items-center gap-2 mb-5">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
               Project Overview
@@ -43,7 +43,7 @@ export default function AboutPage() {
               v1
             </span>
           </div>
-          <h1 className="text-[2.75rem] font-bold tracking-tight text-gray-900 leading-none">
+          <h1 className="text-[1.75rem] md:text-[2.75rem] font-bold tracking-tight text-gray-900 leading-none">
             OrthoIntake
           </h1>
           <p className="mt-3.5 text-base text-gray-500 max-w-xl leading-relaxed">
@@ -52,8 +52,8 @@ export default function AboutPage() {
         </div>
 
         {/* What it is / Why it exists */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 py-6">
-          <div className="grid grid-cols-2 gap-12 max-w-3xl">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-5 md:px-8 md:py-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 max-w-3xl">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-4">
                 What it is
@@ -78,7 +78,7 @@ export default function AboutPage() {
         </div>
 
         {/* Core capabilities */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 py-6">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-5 md:px-8 md:py-6">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-5">
             Core Capabilities
           </p>
@@ -93,7 +93,7 @@ export default function AboutPage() {
         </div>
 
         {/* Technical architecture */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 py-6">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-5 md:px-8 md:py-6">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-5">
             Technical Architecture
           </p>
@@ -108,8 +108,8 @@ export default function AboutPage() {
         </div>
 
         {/* Design decision + status */}
-        <div className="grid grid-cols-2 gap-5">
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-5 md:px-8 md:py-6">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-4">
               Design Decision
             </p>
@@ -121,7 +121,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-8 py-6">
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-5 md:px-8 md:py-6">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-4">
               Current Status
             </p>

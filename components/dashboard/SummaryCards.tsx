@@ -45,7 +45,7 @@ export default function SummaryCards({
     allergies.length === 0 ? "None documented" : `${allergies.length} on record`;
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       {/* Visit Type */}
       <SummaryCard
         iconBg="bg-blue-50"

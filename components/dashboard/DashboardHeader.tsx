@@ -15,7 +15,7 @@ export default function DashboardHeader({ patient }: Props) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="px-8 pt-7 pb-7">
+      <div className="px-5 pt-5 pb-5 md:px-8 md:pt-7 md:pb-7">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6">
           <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
@@ -46,7 +46,7 @@ export default function DashboardHeader({ patient }: Props) {
 
           {/* Name + demographics */}
           <div className="flex-1 min-w-0">
-            <h1 className="text-[2.75rem] font-bold tracking-tight text-gray-900 leading-none">
+            <h1 className="text-[1.75rem] md:text-[2.75rem] font-bold tracking-tight text-gray-900 leading-none">
               {patient.name}
             </h1>
 
@@ -69,7 +69,7 @@ export default function DashboardHeader({ patient }: Props) {
                 {patient.age} years old · {patient.dob}
               </span>
 
-              <span className="w-px h-3.5 bg-gray-200 flex-shrink-0" />
+              <span className="hidden sm:block w-px h-3.5 bg-gray-200 flex-shrink-0" />
 
               <span className="flex items-center gap-1.5 text-sm text-gray-600">
                 <svg
@@ -87,7 +87,7 @@ export default function DashboardHeader({ patient }: Props) {
                 {patient.sex}
               </span>
 
-              <span className="w-px h-3.5 bg-gray-200 flex-shrink-0" />
+              <span className="hidden sm:block w-px h-3.5 bg-gray-200 flex-shrink-0" />
 
               <span className="flex items-center gap-1.5 text-sm text-gray-600">
                 <svg
@@ -110,7 +110,7 @@ export default function DashboardHeader({ patient }: Props) {
             </div>
 
             {/* Clinical metadata */}
-            <div className="mt-5 flex gap-12 flex-wrap">
+            <div className="mt-4 md:mt-5 flex gap-6 md:gap-12 flex-wrap">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
                   Reason for Visit

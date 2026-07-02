@@ -83,7 +83,7 @@ export default function Sidebar({ patients, currentPatientId }: Props) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 min-h-screen bg-white border-r border-gray-100 flex flex-col">
+    <aside className="w-56 shrink-0 min-h-screen bg-white border-r border-gray-100 flex flex-col shadow-xl md:shadow-none">
       {/* Logo */}
       <div className="px-5 pt-7 pb-6 flex-shrink-0">
         <div className="flex items-center gap-2.5">
